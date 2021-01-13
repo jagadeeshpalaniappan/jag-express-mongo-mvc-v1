@@ -55,7 +55,7 @@ exports.update = async (req, res) => {
   try {
     const data = await dao.update({ id, article: req.body });
     if (!data) res.status(404).send(getErr(null, "AE_UPDATE_NOTFOUND", id));
-    else res.send(data);
+    else res.send({ ...req.body, id });
   } catch (err) {
     res.status(500).send(getErr(err, "AE_UPDATE_ERR", id));
   }

@@ -12,9 +12,11 @@ const errCodes = {
   AE_DEL_NOTFOUND: "Article Not found [ID:%s], Cannot delete",
   AE_DEL_DB_ERR: "DB error occurred while deleting the Article [ID:%s].",
   AE_DEL_ERR: "Some error occurred while deleting the Article [ID:%s].",
+  AE_DEL_SUCCESS: "Article [ID:%s] was deleted successfully.",
 
   AE_DELALL_DB_ERR: "DB error occurred while deleting the Articles.",
   AE_DELALL_ERR: "Some error occurred while deleting the Articles.",
+  AE_DELALL_SUCCESS: "%s Articles were deleted successfully.",
 
   AE_FIND_NOTFOUND: "Article not found [ID: %s]",
   AE_FIND_DB_ERR: "DB error occurred while getting the Article [ID: %s]",

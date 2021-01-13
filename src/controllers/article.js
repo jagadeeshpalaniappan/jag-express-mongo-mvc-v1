@@ -39,7 +39,7 @@ exports.findOne = async (req, res) => {
   const id = req.params.id;
   try {
     const data = await dao.findOne({ id });
-    if (!data) res.status(404).send(getErr(err, "AE_FIND_NOTFOUND", id));
+    if (!data) res.status(404).send(getErr(null, "AE_FIND_NOTFOUND", id));
     else res.send(data);
   } catch (err) {
     res.status(500).send(getErr(err, "AE_FIND_ERR", id));
@@ -50,12 +50,12 @@ exports.findOne = async (req, res) => {
 exports.update = async (req, res) => {
   const id = req.params.id;
   if (!req.body) {
-    return res.status(400).send(getErr(err, "AE_UPDATE_VALIDATION", id));
+    return res.status(400).send(getErr(null, "AE_UPDATE_VALIDATION", id));
   }
   try {
     const data = await dao.update({ id, article: req.body });
-    if (!data) res.status(404).send(getErr(err, "AE_UPDATE_NOTFOUND", id));
-    else res.send({ message: "Article was updated successfully." });
+    if (!data) res.status(404).send(getErr(null, "AE_UPDATE_NOTFOUND", id));
+    else res.send(data);
   } catch (err) {
     res.status(500).send(getErr(err, "AE_UPDATE_ERR", id));
   }
@@ -67,8 +67,8 @@ exports.delete = async (req, res) => {
 
   try {
     const data = await dao.delete({ id });
-    if (!data) res.status(404).send(getErr(err, "AE_DEL_NOTFOUND", id));
-    else res.send({ message: "Article was deleted successfully!" });
+    if (!data) res.status(404).send(getErr(null, "AE_DEL_NOTFOUND", id));
+    else res.send(getErr(null, "AE_DEL_SUCCESS", id));
   } catch (err) {
     res.status(500).send(getErr(err, "AE_DEL_ERR", id));
   }
@@ -78,9 +78,7 @@ exports.delete = async (req, res) => {
 exports.deleteAll = async (req, res) => {
   try {
     const data = await dao.deleteAll();
-    res.send({
-      message: `${data.deletedCount} Articles were deleted successfully!`,
-    });
+    res.send(getErr(null, "AE_DELALL_SUCCESS", data.deletedCount));
   } catch (err) {
     res.status(500).send(getErr(err, "AE_DELALL_ERR"));
   }

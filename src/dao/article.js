@@ -54,7 +54,10 @@ exports.update = async ({ id, article }) => {
 // Delete a Article with the specified id
 exports.delete = async ({ id }) => {
   try {
-    await Article.findByIdAndRemove(id, { useFindAndModify: false });
+    const data = await Article.findByIdAndRemove(id, {
+      useFindAndModify: false,
+    });
+    return data;
   } catch (err) {
     throw new AppErr(err, "AE_DEL_DB_ERR", id);
   }
@@ -63,7 +66,8 @@ exports.delete = async ({ id }) => {
 // Delete all Articles from the database.
 exports.deleteAll = async () => {
   try {
-    await Article.deleteMany({});
+    const data = await Article.deleteMany({});
+    return data;
   } catch (err) {
     throw new AppErr(err, "AE_DELALL_DB_ERR");
   }

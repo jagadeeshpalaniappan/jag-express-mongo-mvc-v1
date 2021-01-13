@@ -4,7 +4,9 @@
   "description": "Node.js, Express and MongoDB - CRUD",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "local": "NODE_ENV=local node .",
+    "dev": "NODE_ENV=dev node ."
   },
   "keywords": [
     "nodejs",

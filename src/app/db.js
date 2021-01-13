@@ -19,4 +19,4 @@ function init() {
     });
 }
 
-module.exports = { mongoose, init };
+module.exports = { init };

@@ -1,4 +1,4 @@
-const { mongoose } = require("../app/db");
+const mongoose = require("mongoose");
 
 var Schema = mongoose.Schema(
   {

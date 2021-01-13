@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const ctrl = require("../controllers/article.ctrl.js");
+const ctrl = require("../controllers/article");
 
 // Retrieve all Articles
 router.get("/", ctrl.findAll);

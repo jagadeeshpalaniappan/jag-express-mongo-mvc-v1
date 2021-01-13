@@ -1,4 +1,4 @@
-const articleRoutes = require("../routes/article.routes");
+const articleRoutes = require("../routes/article");
 
 module.exports = (app) => {
   // ROOT:

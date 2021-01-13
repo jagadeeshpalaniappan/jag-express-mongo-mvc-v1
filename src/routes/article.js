@@ -4,9 +4,6 @@ const ctrl = require("../controllers/article");
 // Retrieve all Articles
 router.get("/", ctrl.findAll);
 
-// Retrieve all published Articles
-router.get("/published", ctrl.findAllPublished);
-
 // Retrieve a single Article with id
 router.get("/:id", ctrl.findOne);
 

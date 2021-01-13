@@ -1,42 +1,70 @@
+const { AppErr } = require("../app/error");
+
 const { Article } = require("../models/article");
 
 // Create and Save a new Article
-exports.create = (article) => {
-  // Create a Article
-  const articleDoc = new Article(article);
-  // Save Article in the database
-  return articleDoc.save(article);
+exports.create = async (article) => {
+  try {
+    // Create a Article
+    const articleDoc = new Article(article);
+    // Save Article in the database
+    const data = await articleDoc.save(article);
+    return data;
+  } catch (err) {
+    throw new AppErr(err, "AE_CREATE_DB_ERR");
+  }
 };
 
 // Retrieve all Articles from the database.
-exports.findAll = ({ title }) => {
-  var condition = title
-    ? { title: { $regex: new RegExp(title), $options: "i" } }
-    : {};
-  return Article.find(condition);
+exports.findAll = async ({ title, published }) => {
+  try {
+    var condition = {};
+    if (title) condition.title = { $regex: new RegExp(title), $options: "i" };
+    if (published) condition.published = true;
+
+    const articles = await Article.find(condition);
+    return articles;
+  } catch (err) {
+    throw new AppErr(err, "AE_FINDALL_DB_ERR");
+  }
 };
 
 // Find a single Article with an id
-exports.findOne = ({ id }) => {
-  return Article.findById(id);
+exports.findOne = async ({ id }) => {
+  try {
+    const data = await Article.findById(id);
+    return data;
+  } catch (err) {
+    throw new AppErr(err, "AE_FIND_DB_ERR", id);
+  }
 };
 
-// Update a Article by the id in the request
-exports.update = ({ id, article }) => {
-  return Article.findByIdAndUpdate(id, article, { useFindAndModify: false });
+// Update a Article by the id
+exports.update = async ({ id, article }) => {
+  try {
+    const data = await Article.findByIdAndUpdate(id, article, {
+      useFindAndModify: false,
+    });
+    return data;
+  } catch (err) {
+    throw new AppErr(err, "AE_UPDATE_DB_ERR", id);
+  }
 };
 
-// Delete a Article with the specified id in the request
-exports.delete = ({ id }) => {
-  return Article.findByIdAndRemove(id, { useFindAndModify: false });
+// Delete a Article with the specified id
+exports.delete = async ({ id }) => {
+  try {
+    await Article.findByIdAndRemove(id, { useFindAndModify: false });
+  } catch (err) {
+    throw new AppErr(err, "AE_DEL_DB_ERR", id);
+  }
 };
 
 // Delete all Articles from the database.
-exports.deleteAll = () => {
-  return Article.deleteMany({});
-};
-
-// Find all published Articles
-exports.findAllPublished = () => {
-  return Article.find({ published: true });
+exports.deleteAll = async () => {
+  try {
+    await Article.deleteMany({});
+  } catch (err) {
+    throw new AppErr(err, "AE_DELALL_DB_ERR");
+  }
 };

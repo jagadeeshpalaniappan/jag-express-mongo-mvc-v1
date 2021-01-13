@@ -1,4 +1,4 @@
-const { AppErr } = require("../app/error");
+const { AppErr } = require("../utils/status");
 
 const { Article } = require("../models/article");
 

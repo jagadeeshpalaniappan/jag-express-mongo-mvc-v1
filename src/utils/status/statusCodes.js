@@ -1,4 +1,4 @@
-const errCodes = {
+const statusCodes = {
   // ARTICLE:
   AE_CREATE_DB_ERR: "DB error occurred while creating the Article.",
   AE_CREATE_ERR: "Some error occurred while creating the Article.",
@@ -29,4 +29,4 @@ const errCodes = {
   AE_FINDALL_ERR: "Some error occurred while getting the Articles.",
 };
 
-module.exports = errCodes;
+module.exports = statusCodes;

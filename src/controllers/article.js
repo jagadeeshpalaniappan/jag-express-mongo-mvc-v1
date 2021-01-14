@@ -1,5 +1,5 @@
 const { getMsg } = require("../utils/status");
-const dao = require("../dao/article");
+const svc = require("../services/article");
 
 // Create and Save a new Article
 exports.create = async (req, res) => {
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
       description: req.body.description,
       published: req.body.published ? req.body.published : false,
     };
-    const createdArticle = await dao.create(article);
+    const createdArticle = await svc.create(article);
     res.send(createdArticle);
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_CREATE_ERR"));
@@ -27,7 +27,7 @@ exports.findAll = async (req, res) => {
   const title = req.query.title;
   const published = req.query.published;
   try {
-    const data = await dao.findAll({ title, published });
+    const data = await svc.findAll({ title, published });
     res.send(data);
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_FINDALL_ERR"));
@@ -38,7 +38,7 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await dao.findOne({ id });
+    const data = await svc.findOne({ id });
     if (!data) res.status(404).send(getMsg(null, "AE_FIND_NOTFOUND", id));
     else res.send(data);
   } catch (err) {
@@ -53,7 +53,7 @@ exports.update = async (req, res) => {
     return res.status(400).send(getMsg(null, "AE_UPDATE_VALIDATION", id));
   }
   try {
-    const data = await dao.update({ id, article: req.body });
+    const data = await svc.update({ id, article: req.body });
     if (!data) res.status(404).send(getMsg(null, "AE_UPDATE_NOTFOUND", id));
     else res.send({ ...req.body, id });
   } catch (err) {
@@ -66,7 +66,7 @@ exports.delete = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const data = await dao.delete({ id });
+    const data = await svc.delete({ id });
     if (!data) res.status(404).send(getMsg(null, "AE_DEL_NOTFOUND", id));
     else res.send(getMsg(null, "AE_DEL_SUCCESS", id));
   } catch (err) {
@@ -77,7 +77,7 @@ exports.delete = async (req, res) => {
 // Delete all Articles from the database.
 exports.deleteAll = async (req, res) => {
   try {
-    const data = await dao.deleteAll();
+    const data = await svc.deleteAll();
     res.send(getMsg(null, "AE_DELALL_SUCCESS", data.deletedCount));
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_DELALL_ERR"));

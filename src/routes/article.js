@@ -14,7 +14,7 @@ router.post("/", ctrl.create);
 router.put("/:id", ctrl.update);
 
 // Delete a Article with id
-router.delete("/:id", ctrl.delete);
+router.delete("/:id", ctrl.deleteOne);
 
 // Delete all Article
 router.delete("/", ctrl.deleteAll);

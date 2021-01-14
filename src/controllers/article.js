@@ -1,29 +1,34 @@
 const { getMsg } = require("../utils/status");
 const svc = require("../services/article");
 
-// Create and Save a new Article
-exports.create = async (req, res) => {
+const mapArticle = ({ title, description, published }) => ({
+  title,
+  description,
+  published: !!published,
+});
+
+// Create and Save one or many new Articles
+async function create(req, res) {
+  const articles = Array.isArray(req.body)
+    ? req.body.map(mapArticle)
+    : [mapArticle(req.body)];
+
   // Validate request
-  if (!req.body.title) {
-    res.status(400).send(getMsg(null, "AE_CREATE_VALIDATION", "title"));
-    return;
-  }
+  // if (!req.body.title) {
+  //   res.status(400).send(getMsg(null, "AE_CREATE_VALIDATION", "title"));
+  //   return;
+  // }
 
   try {
-    const article = {
-      title: req.body.title,
-      description: req.body.description,
-      published: req.body.published ? req.body.published : false,
-    };
-    const createdArticle = await svc.create(article);
+    const createdArticle = await svc.create(articles);
     res.send(createdArticle);
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_CREATE_ERR"));
   }
-};
+}
 
 // Retrieve all Articles from the database.
-exports.findAll = async (req, res) => {
+async function findAll(req, res) {
   const title = req.query.title;
   const published = req.query.published;
   try {
@@ -32,10 +37,10 @@ exports.findAll = async (req, res) => {
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_FINDALL_ERR"));
   }
-};
+}
 
 // Find a single Article with an id
-exports.findOne = async (req, res) => {
+async function findOne(req, res) {
   const id = req.params.id;
   try {
     const data = await svc.findOne({ id });
@@ -44,10 +49,10 @@ exports.findOne = async (req, res) => {
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_FIND_ERR", id));
   }
-};
+}
 
 // Update a Article by the id in the request
-exports.update = async (req, res) => {
+async function update(req, res) {
   const id = req.params.id;
   if (!req.body) {
     return res.status(400).send(getMsg(null, "AE_UPDATE_VALIDATION", id));
@@ -59,27 +64,36 @@ exports.update = async (req, res) => {
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_UPDATE_ERR", id));
   }
-};
+}
 
 // Delete a Article with the specified id in the request
-exports.delete = async (req, res) => {
+async function deleteOne(req, res) {
   const id = req.params.id;
 
   try {
-    const data = await svc.delete({ id });
+    const data = await svc.deleteOne({ id });
     if (!data) res.status(404).send(getMsg(null, "AE_DEL_NOTFOUND", id));
     else res.send(getMsg(null, "AE_DEL_SUCCESS", id));
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_DEL_ERR", id));
   }
-};
+}
 
 // Delete all Articles from the database.
-exports.deleteAll = async (req, res) => {
+async function deleteAll(req, res) {
   try {
     const data = await svc.deleteAll();
     res.send(getMsg(null, "AE_DELALL_SUCCESS", data.deletedCount));
   } catch (err) {
     res.status(500).send(getMsg(err, "AE_DELALL_ERR"));
   }
+}
+
+module.exports = {
+  findAll,
+  findOne,
+  create,
+  update,
+  deleteOne,
+  deleteAll,
 };
